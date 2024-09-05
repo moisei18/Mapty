@@ -79,6 +79,7 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 const closeFormBtn = document.querySelector('.form__close-btn');
+const emptyMsg = document.querySelector('.empty__msg');
 
 class App {
   #map;
@@ -99,6 +100,9 @@ class App {
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     closeFormBtn.addEventListener('click', this._hideForm.bind(this));
+
+    // Check if #workouts is empty
+    if (this.#workouts.length === 0) emptyMsg.classList.remove('hidden');
   }
 
   _getPosition() {
@@ -136,7 +140,10 @@ class App {
     }).addTo(this.#map);
 
     // Handling clicks on the map
-    this.#map.on('click', this._showForm.bind(this));
+    this.#map.on('click', mapE => {
+      emptyMsg.classList.add('hidden');
+      this._showForm(mapE);
+    });
 
     // Render markers for existing workouts
     this.#workouts.forEach(work => {
@@ -151,6 +158,8 @@ class App {
   }
 
   _hideForm() {
+    emptyMsg.classList.remove('hidden');
+    if (this.#workouts.length !== 0) emptyMsg.classList.add('hidden');
     // Empty inputs
     inputDistance.value =
       inputDuration.value =
@@ -321,6 +330,7 @@ class App {
 
     // Remove the workout from the list
     document.querySelector(`[data-id="${workoutId}"]`).remove();
+    if (this.#workouts.length === 0) emptyMsg.classList.remove('hidden');
 
     // Update localStorage
     this._setLocalStorage();

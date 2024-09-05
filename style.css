@@ -114,6 +114,10 @@ a:visited {
   font-weight: 800;
 }
 
+.empty__msg {
+  text-align: center;
+}
+
 .form {
   background-color: var(--color-dark--2);
   border-radius: 5px;
@@ -128,6 +132,10 @@ a:visited {
   /* Match height and activity boxes */
   height: 12rem;
   transition: all 0.5s, transform 1ms;
+}
+
+.empty__msg.hidden {
+  display: none;
 }
 
 .form.hidden {
